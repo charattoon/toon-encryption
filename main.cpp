@@ -22,7 +22,7 @@
 
 // Application helpers
 #include "DummySensor.h"
-#include "trace_helper.h"
+// #include "trace_helper.h"
 #include "lora_radio_helper.h"
 
 using namespace events;
@@ -36,7 +36,7 @@ uint8_t rx_buffer[30];
 /*
  * Sets up an application dependent transmission timer in ms. Used only when Duty Cycling is off for testing
  */
-#define TX_TIMER                        10000
+#define TX_TIMER                        30000
 
 /**
  * Maximum number of events for the event queue.
@@ -93,7 +93,7 @@ static lorawan_app_callbacks_t callbacks;
 int main(void)
 {
     // setup tracing
-    setup_trace();
+    // setup_trace();
 
     // stores the status of a call to LoRaWAN protocol
     lorawan_status_t retcode;
