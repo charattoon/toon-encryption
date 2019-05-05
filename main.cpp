@@ -36,7 +36,7 @@ uint8_t rx_buffer[30];
 /*
  * Sets up an application dependent transmission timer in ms. Used only when Duty Cycling is off for testing
  */
-#define TX_TIMER                        30000
+#define TX_TIMER                        10000
 
 /**
  * Maximum number of events for the event queue.

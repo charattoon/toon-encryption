@@ -21,6 +21,7 @@ Copyright (c) 2017, Arm Limited and affiliates.
 
 SPDX-License-Identifier: BSD-3-Clause
 */
+#include <stdio.h>
 #include <stdlib.h>
 #include "LoRaMac.h"
 
@@ -90,6 +91,7 @@ LoRaMac::LoRaMac()
 
     memset(_params.keys.nwk_skey, 0, sizeof(_params.keys.nwk_skey));
     memset(_params.keys.app_skey, 0, sizeof(_params.keys.app_skey));
+    memset(_params.keys.toon_key, 0, sizeof(_params.keys.toon_key));
     memset(&_ongoing_tx_msg, 0, sizeof(_ongoing_tx_msg));
     memset(&_params.sys_params, 0, sizeof(_params.sys_params));
 
@@ -425,6 +427,7 @@ void LoRaMac::extract_data_and_mac_commands(const uint8_t *payload,
                                      _params.rx_buffer) != 0) {
         _mcps_indication.status = LORAMAC_EVENT_INFO_STATUS_CRYPTO_FAIL;
     } else {
+        // **************************************************
         _mcps_indication.buffer = _params.rx_buffer;
         _mcps_indication.buffer_size = frame_len;
         _mcps_indication.is_data_recvd = true;
@@ -469,6 +472,7 @@ void LoRaMac::handle_data_frame(const uint8_t *const payload,
     uint8_t app_payload_start_index = 0;
     uint8_t *nwk_skey = _params.keys.nwk_skey;
     uint8_t *app_skey = _params.keys.app_skey;
+    uint8_t *toon_key = _params.keys.toon_key;
 
     address = payload[ptr_pos++];
     address |= ((uint32_t) payload[ptr_pos++] << 8);
@@ -484,6 +488,7 @@ void LoRaMac::handle_data_frame(const uint8_t *const payload,
                 is_multicast = true;
                 nwk_skey = cur_multicast_params->nwk_skey;
                 app_skey = cur_multicast_params->app_skey;
+                toon_key = cur_multicast_params->toon_key;
                 downlink_counter = cur_multicast_params->dl_frame_counter;
                 break;
             }
@@ -501,6 +506,7 @@ void LoRaMac::handle_data_frame(const uint8_t *const payload,
         is_multicast = false;
         nwk_skey = _params.keys.nwk_skey;
         app_skey = _params.keys.app_skey;
+        toon_key = _params.keys.toon_key;
         downlink_counter = _params.dl_frame_counter;
     }
 
@@ -1531,6 +1537,8 @@ lorawan_status_t LoRaMac::prepare_join(const lorawan_connect_t *params, bool is_
 #else
         const static uint8_t nwk_skey[] = MBED_CONF_LORA_NWKSKEY;
         const static uint8_t app_skey[] = MBED_CONF_LORA_APPSKEY;
+        const static uint8_t toon_key[] = { 0x7F, 0x86, 0x81, 0x64, 0x13, 0x74, 0xFF, 0x97, 0x46, 0x7B, 0x6A, 0x1D, 0xC0, 0xA6, 0x37, 0xA6 };
+        memcpy(_params.keys.toon_key, toon_key, sizeof(_params.keys.toon_key));
 
         _params.net_id = (MBED_CONF_LORA_DEVICE_ADDRESS & LORAWAN_NETWORK_ID_MASK) >> 25;
         _params.dev_addr = MBED_CONF_LORA_DEVICE_ADDRESS;
@@ -1697,6 +1705,39 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                     key = _params.keys.nwk_skey;
                     key_length = sizeof(_params.keys.nwk_skey) * 8;
                 }
+                // ****************************************************
+                // if(frame_port == 0){
+                //     // one encrypt
+                //     if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
+                //                                       key, key_length,
+                //                                       _params.dev_addr, UP_LINK,
+                //                                       _params.ul_frame_counter,
+                //                                       &_params.tx_buffer[pkt_header_len])) {
+                //     status = LORAWAN_STATUS_CRYPTO_FAIL;
+                // }
+                // else{
+                //     // toon encrypt
+                //     key = _params.keys.toon_key;
+                //     key_length = sizeof(_params.keys.toon_key) * 8;
+                //     if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
+                //                                       key, key_length,
+                //                                       _params.dev_addr, UP_LINK,
+                //                                       _params.ul_frame_counter,
+                //                                       &_params.tx_buffer[pkt_header_len])) {
+                //     status = LORAWAN_STATUS_CRYPTO_FAIL;
+                //     }else{
+                //         //app encrypt
+                //         key = _params.keys.app_skey;
+                //         key_length = sizeof(_params.keys.app_skey) * 8;
+                //         if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
+                //                                       key, key_length,
+                //                                       _params.dev_addr, UP_LINK,
+                //                                       _params.ul_frame_counter,
+                //                                       &_params.tx_buffer[pkt_header_len])) {
+                //         status = LORAWAN_STATUS_CRYPTO_FAIL;
+                //     }
+                // }
+
                 if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
                                                       key, key_length,
                                                       _params.dev_addr, UP_LINK,

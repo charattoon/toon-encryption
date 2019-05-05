@@ -248,6 +248,10 @@ typedef struct multicast_params_s {
      */
     uint8_t app_skey[16];
     /*!
+     * Toon key.
+     */
+    uint8_t toon_key[16];
+    /*!
      * Downlink counter.
      */
     uint32_t dl_frame_counter;
@@ -1086,6 +1090,8 @@ typedef struct {
      * NOTE! LoRaMac determines the length of the key based on sizeof this variable
      */
     uint8_t app_skey[16];
+
+    uint8_t toon_key[16];
 
 } loramac_keys;
 
