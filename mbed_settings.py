@@ -25,7 +25,7 @@ from os.path import join, abspath, dirname
 #BUILD_DIR = abspath(join(ROOT, "build"))
 
 # ARM
-#ARM_PATH = "C:/Program Files/ARM"
+ARM_PATH = "C:\Keil_v5\ARM\ARMCC"
 
 # GCC ARM
 #GCC_ARM_PATH = ""
