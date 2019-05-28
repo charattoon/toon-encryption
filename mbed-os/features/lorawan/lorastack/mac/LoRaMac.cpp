@@ -1741,47 +1741,47 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                 }
                 else
                 {
-                //     // TOON ENCTYPT
-                //     printf("\npayload");
-                //     printData(payload, 32);
-                //     memset(_params.toon_tx_buffer, 0, sizeof _params.toon_tx_buffer);
-                //     key = _params.keys.toon_key;
-                //     key_length = sizeof(_params.keys.toon_key) * 8;
-                //     if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
-                //                                       key, key_length,
-                //                                       _params.dev_addr, UP_LINK,
-                //                                       _params.ul_frame_counter,
-                //                                       &_params.toon_tx_buffer[0])) {
-                //     status = LORAWAN_STATUS_CRYPTO_FAIL;
-                //     }
-                //     printf("\ntoon_tx_buffer");
-                //     printData(_params.toon_tx_buffer, 32);
+                    // TOON ENCTYPT
+                    printf("\npayload");
+                    printData(payload, 32);
+                    memset(_params.toon_tx_buffer, 0, sizeof _params.toon_tx_buffer);
+                    key = _params.keys.toon_key;
+                    key_length = sizeof(_params.keys.toon_key) * 8;
+                    if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
+                                                      key, key_length,
+                                                      _params.dev_addr, UP_LINK,
+                                                      _params.ul_frame_counter,
+                                                      &_params.toon_tx_buffer[0])) {
+                    status = LORAWAN_STATUS_CRYPTO_FAIL;
+                    }
+                    printf("\ntoon_tx_buffer");
+                    printData(_params.toon_tx_buffer, 32);
                     
-                //     // APP ENCRYPT
-                //     key = _params.keys.app_skey;
-                //     key_length = sizeof(_params.keys.app_skey) * 8;
-                //     if (0 != _lora_crypto.encrypt_payload((uint8_t *) _params.toon_tx_buffer, _params.tx_buffer_len,
-                //                                       key, key_length,
-                //                                       _params.dev_addr, UP_LINK,
-                //                                       _params.ul_frame_counter,
-                //                                       &_params.tx_buffer[pkt_header_len])) {
-                //     status = LORAWAN_STATUS_CRYPTO_FAIL;
-                //     }
-                //     printf("\ntx_buffer = machdr + dev_addr + fctrl + ul_frame_counter + mac_commands_buffer + frame_port + encrpt_payload");
-                //     printData(_params.tx_buffer, 64);
-                // }
-                
-                // ********************************************************
-                if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
+                    // APP ENCRYPT
+                    key = _params.keys.app_skey;
+                    key_length = sizeof(_params.keys.app_skey) * 8;
+                    if (0 != _lora_crypto.encrypt_payload((uint8_t *) _params.toon_tx_buffer, _params.tx_buffer_len,
                                                       key, key_length,
                                                       _params.dev_addr, UP_LINK,
                                                       _params.ul_frame_counter,
                                                       &_params.tx_buffer[pkt_header_len])) {
                     status = LORAWAN_STATUS_CRYPTO_FAIL;
+                    }
+                    printf("\ntx_buffer = machdr + dev_addr + fctrl + ul_frame_counter + mac_commands_buffer + frame_port + encrpt_payload");
+                    printData(_params.tx_buffer, 64);
                 }
-                printf("\ntx_buffer = machdr[1] + dev_addr[4] + fctrl[1] + ul_frame_counter[1] + mac_commands_buffer[1] + frame_port[1] + encrpt_payload[]");
-                printData(_params.tx_buffer, 64);
-                }
+                
+                // ********************************************************
+                // if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
+                //                                       key, key_length,
+                //                                       _params.dev_addr, UP_LINK,
+                //                                       _params.ul_frame_counter,
+                //                                       &_params.tx_buffer[pkt_header_len])) {
+                //     status = LORAWAN_STATUS_CRYPTO_FAIL;
+                // }
+                // printf("\ntx_buffer = machdr[1] + dev_addr[4] + fctrl[1] + ul_frame_counter[1] + mac_commands_buffer[1] + frame_port[1] + encrpt_payload[]");
+                // printData(_params.tx_buffer, 64);
+                // }
             }
 
             _params.tx_buffer_len = pkt_header_len + _params.tx_buffer_len;
