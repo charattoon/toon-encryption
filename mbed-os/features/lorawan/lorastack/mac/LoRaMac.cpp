@@ -1768,7 +1768,7 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                 //     status = LORAWAN_STATUS_CRYPTO_FAIL;
                 //     }
                 //     printf("\ntx_buffer = machdr + dev_addr + fctrl + ul_frame_counter + mac_commands_buffer + frame_port + encrpt_payload");
-                //     printData(_params.tx_buffer, 32);
+                //     printData(_params.tx_buffer, 64);
                 // }
                 
                 // ********************************************************
@@ -1780,7 +1780,7 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                     status = LORAWAN_STATUS_CRYPTO_FAIL;
                 }
                 printf("\ntx_buffer = machdr[1] + dev_addr[4] + fctrl[1] + ul_frame_counter[1] + mac_commands_buffer[1] + frame_port[1] + encrpt_payload[]");
-                printData(_params.tx_buffer, 32);
+                printData(_params.tx_buffer, 64);
                 }
             }
 
