@@ -250,7 +250,7 @@ typedef struct multicast_params_s {
     /*!
      * Toon key.
      */
-    uint8_t toon_key[16];
+    // uint8_t toon_key[16];
     /*!
      * Downlink counter.
      */
@@ -1211,6 +1211,11 @@ typedef struct {
      * TX buffer used for encrypted outgoing frames
      */
     uint8_t tx_buffer[LORAMAC_PHY_MAXPAYLOAD];
+
+    uint8_t toon_tx_buffer[LORAMAC_PHY_MAXPAYLOAD];
+    // uint16_t toon_tx_buffer_len;
+    uint8_t toon_rx_buffer[LORAMAC_PHY_MAXPAYLOAD];
+    // uint16_t toon_rx_buffer_len;
 
     /*!
      * Length of TX buffer

@@ -30,13 +30,13 @@ using namespace events;
 // Max payload size can be LORAMAC_PHY_MAXPAYLOAD.
 // This example only communicates with much shorter messages (<30 bytes).
 // If longer messages are used, these buffers must be changed accordingly.
-uint8_t tx_buffer[30];
-uint8_t rx_buffer[30];
+uint8_t tx_buffer[50];
+uint8_t rx_buffer[50];
 
 /*
  * Sets up an application dependent transmission timer in ms. Used only when Duty Cycling is off for testing
  */
-#define TX_TIMER                        10000
+#define TX_TIMER                        30000
 
 /**
  * Maximum number of events for the event queue.
@@ -165,7 +165,7 @@ static void send_message()
     }
 
     packet_len = sprintf((char *) tx_buffer, "Dummy Sensor Value is %3.1f",
-                         sensor_value);
+                         sensor_value)+7;
 
     retcode = lorawan.send(MBED_CONF_LORA_APP_PORT, tx_buffer, packet_len,
                            MSG_UNCONFIRMED_FLAG);
@@ -183,7 +183,7 @@ static void send_message()
         return;
     }
 
-    printf("\r\n %d bytes scheduled for transmission \r\n", retcode);
+    printf("\r\n %d bytes scheduled for transmission \r\n", retcode-7);
     memset(tx_buffer, 0, sizeof(tx_buffer));
 }
 
