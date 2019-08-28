@@ -1564,7 +1564,8 @@ lorawan_status_t LoRaMac::prepare_join(const lorawan_connect_t *params, bool is_
 #else
         const static uint8_t nwk_skey[] = MBED_CONF_LORA_NWKSKEY;
         const static uint8_t app_skey[] = MBED_CONF_LORA_APPSKEY;
-        const static uint8_t toon_key[] = { 0x0d, 0x5b, 0x41, 0x11, 0x74, 0xf7, 0xf3, 0x54, 0x3f, 0xbd, 0x00, 0x6a, 0xbc, 0x1f, 0x71, 0x6e }; // set key for toon_key
+        // const static uint8_t toon_key[] = { 0x0d, 0x5b, 0x41, 0x11, 0x74, 0xf7, 0xf3, 0x54, 0x3f, 0xbd, 0x00, 0x6a, 0xbc, 0x1f, 0x71, 0x6e }; // set key for toon_key
+        const static uint8_t toon_key[] = { 0x53, 0xCA, 0xB0, 0xAF, 0x41, 0x41, 0xFD, 0xC3, 0xAB, 0x97, 0x3F, 0x11, 0x07, 0x67, 0x8B, 0x27, 0xEF, 0xAC, 0x7F, 0x45, 0x49, 0xFC, 0xCB, 0x72 };
         memcpy(_params.keys.toon_key, toon_key, sizeof(_params.keys.toon_key)); // copy toon_key to memory
 
         _params.net_id = (MBED_CONF_LORA_DEVICE_ADDRESS & LORAWAN_NETWORK_ID_MASK) >> 25;
@@ -1753,8 +1754,8 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                                                       &_params.toon_tx_buffer[0])) {
                     status = LORAWAN_STATUS_CRYPTO_FAIL;
                     }
-                    printf("\ntoon_tx_buffer: ");
-                    printData(_params.toon_tx_buffer, sizeof _params.toon_tx_buffer);
+                    // printf("\ntoon_tx_buffer: ");
+                    // printData(_params.toon_tx_buffer, sizeof _params.toon_tx_buffer);
                     _params.toon_tx_buffer[_params.tx_buffer_len++] = (_params.dev_addr) & 0xFF;
                     _params.toon_tx_buffer[_params.tx_buffer_len++] = (_params.dev_addr >> 8) & 0xFF;
                     _params.toon_tx_buffer[_params.tx_buffer_len++] = (_params.dev_addr >> 16) & 0xFF;
@@ -1762,8 +1763,8 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                     _params.toon_tx_buffer[_params.tx_buffer_len++] = (_params.ul_frame_counter) & 0xFF;
                     _params.toon_tx_buffer[_params.tx_buffer_len++] = (_params.ul_frame_counter >> 8) & 0xFF;
                     _params.toon_tx_buffer[_params.tx_buffer_len++] =  machdr->value;
-                    printf("\ntoon_tx_buffer + DevAddr + FCnt + machdr: ");
-                    printData(_params.toon_tx_buffer, sizeof _params.toon_tx_buffer);
+                    // printf("\ntoon_tx_buffer + DevAddr + FCnt + machdr: ");
+                    // printData(_params.toon_tx_buffer, sizeof _params.toon_tx_buffer);
                     
                     // APP ENCRYPT
                     key = _params.keys.app_skey;
