@@ -1776,9 +1776,9 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                                                       &_params.tx_buffer[pkt_header_len])) {
                     status = LORAWAN_STATUS_CRYPTO_FAIL;
                     }
-                    printf("\ntx_buffer: ");
-                    printData(_params.tx_buffer, sizeof _params.tx_buffer);
-                    printf("\ntx_buffer length: %d", _params.tx_buffer_len);
+                    // printf("\ntx_buffer: ");
+                    // printData(_params.tx_buffer, sizeof _params.tx_buffer);
+                    // printf("\ntx_buffer length: %d", _params.tx_buffer_len);
                 }
                 // ********************************************************
                 // if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, _params.tx_buffer_len,
@@ -1807,9 +1807,9 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
 
             _params.tx_buffer_len += LORAMAC_MFR_LEN;
         }
-        printf("\nPHYPayload: ");
-        printData(_params.tx_buffer, sizeof _params.tx_buffer);
-        printf("\nPHYPayload length: %d", _params.tx_buffer_len);
+        // printf("\nPHYPayload: ");
+        // printData(_params.tx_buffer, sizeof _params.tx_buffer);
+        // printf("\nPHYPayload length: %d", _params.tx_buffer_len);
         break;
         case FRAME_TYPE_PROPRIETARY:
             if ((fbuffer != NULL) && (_params.tx_buffer_len > 0)) {
