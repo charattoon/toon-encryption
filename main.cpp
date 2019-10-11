@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 #include <stdio.h>
+#include <mbed.h>
 
 #include "lorawan/LoRaWANInterface.h"
 #include "lorawan/system/lorawan_data_structures.h"
 #include "events/EventQueue.h"
 
 // Application helpers
-#include "DummySensor.h"
+// #include "DummySensor.h"
 // #include "trace_helper.h"
 #include "lora_radio_helper.h"
 
@@ -58,7 +59,7 @@ uint8_t rx_buffer[50];
 /**
  * Dummy sensor class object
  */
-DS1820  ds1820(PC_9);
+// DS1820  ds1820(PC_9);
 
 /**
 * This event queue is the global event queue for both the
@@ -94,6 +95,8 @@ int main(void)
 {
     // setup tracing
     // setup_trace();
+
+    set_time(1570838400);  // Set RTC time to Sat, 12 Oct 2019 12:00:00
 
     // stores the status of a call to LoRaWAN protocol
     lorawan_status_t retcode;
@@ -152,19 +155,25 @@ static void send_message()
 {
     uint16_t packet_len;
     int16_t retcode;
-    float sensor_value;
+    // float sensor_value;
+    unsigned int sensor_value;
 
-    if (ds1820.begin()) {
-        ds1820.startConversion();
-        sensor_value = ds1820.read();
-        printf("\r\n Dummy Sensor Value = %3.1f \r\n", sensor_value);
-        ds1820.startConversion();
-    } else {
-        printf("\r\n No sensor found \r\n");
-        return;
-    }
+    // if (ds1820.begin()) {
+    //     ds1820.startConversion();
+    //     sensor_value = ds1820.read();
+    //     printf("\r\n Dummy Sensor Value = %3.1f \r\n", sensor_value);
+    //     ds1820.startConversion();
+    // } else {
+    //     printf("\r\n No sensor found \r\n");
+    //     return;
+    // }
 
-    packet_len = sprintf((char *) tx_buffer, "Dummy Sensor Value is %3.1f",
+    time_t seconds = time(NULL);
+    printf("Time as seconds since January 1, 1970 = %u\n", (unsigned int)seconds);
+    printf("Time as a basic string = %s", ctime(&seconds));
+    sensor_value = seconds;
+
+    packet_len = sprintf((char *) tx_buffer, "%u",
                          sensor_value)+7;
 
     retcode = lorawan.send(MBED_CONF_LORA_APP_PORT, tx_buffer, packet_len,

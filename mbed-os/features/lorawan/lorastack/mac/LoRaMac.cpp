@@ -1564,8 +1564,9 @@ lorawan_status_t LoRaMac::prepare_join(const lorawan_connect_t *params, bool is_
 #else
         const static uint8_t nwk_skey[] = MBED_CONF_LORA_NWKSKEY;
         const static uint8_t app_skey[] = MBED_CONF_LORA_APPSKEY;
-        // const static uint8_t toon_key[] = { 0x0d, 0x5b, 0x41, 0x11, 0x74, 0xf7, 0xf3, 0x54, 0x3f, 0xbd, 0x00, 0x6a, 0xbc, 0x1f, 0x71, 0x6e }; // set key for toon_key
-        const static uint8_t toon_key[] = { 0x53, 0xCA, 0xB0, 0xAF, 0x41, 0x41, 0xFD, 0xC3, 0xAB, 0x97, 0x3F, 0x11, 0x07, 0x67, 0x8B, 0x27, 0xEF, 0xAC, 0x7F, 0x45, 0x49, 0xFC, 0xCB, 0x72 };
+        const static uint8_t toon_key[] = { 0x0D, 0x5B, 0x41, 0x11, 0x74, 0xF7, 0xF3, 0x54, 0x3F, 0xBD, 0x00, 0x6A, 0xBC, 0x1F, 0x71, 0x6E }; // set key for toon_key 128-bits
+        // const static uint8_t toon_key[] = { 0x53, 0xCA, 0xB0, 0xAF, 0x41, 0x41, 0xFD, 0xC3, 0xAB, 0x97, 0x3F, 0x11, 0x07, 0x67, 0x8B, 0x27, 0xEF, 0xAC, 0x7F, 0x45, 0x49, 0xFC, 0xCB, 0x72 }; // toon_key 192-bits
+        // const static uint8_t toon_key[] = { 0x32, 0x6A, 0x1E, 0xBC, 0x88, 0x24, 0x87, 0x37, 0x05, 0x00, 0xE8, 0x4D, 0x0D, 0xDA, 0x81, 0xF4, 0x6F, 0x69, 0xF6, 0x75, 0x52, 0x64, 0x8F, 0x9E, 0xF2, 0x02, 0x52, 0xFD, 0xCD, 0x89, 0x58, 0x08 }; // toon_key 256-bits
         memcpy(_params.keys.toon_key, toon_key, sizeof(_params.keys.toon_key)); // copy toon_key to memory
 
         _params.net_id = (MBED_CONF_LORA_DEVICE_ADDRESS & LORAWAN_NETWORK_ID_MASK) >> 25;
@@ -1743,9 +1744,10 @@ lorawan_status_t LoRaMac::prepare_frame(loramac_mhdr_t *machdr,
                 else
                 {
                     // TOON ENCTYPT
-                    memset(_params.toon_tx_buffer, 0, sizeof _params.toon_tx_buffer); // allocate memoey for toon_tx_buffer and set to zero
+                    // memset(_params.toon_tx_buffer, 0, sizeof _params.toon_tx_buffer); // allocate memoey for toon_tx_buffer and set to zero
                     key = _params.keys.toon_key;
                     key_length = sizeof(_params.keys.toon_key) * 8;
+                    printf("\ntoon_key: %d-bits", key_length );
                     _params.tx_buffer_len = _params.tx_buffer_len-7; // count only data before encrypt with toon_key
                     if (0 != _lora_crypto.encrypt_payload((uint8_t *) payload, (int)_params.tx_buffer_len,
                                                       key, key_length,

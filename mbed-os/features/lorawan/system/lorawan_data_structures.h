@@ -37,6 +37,8 @@
 #include <inttypes.h>
 #include "lorawan_types.h"
 
+
+#define TOON_KEY_SIZE                               16 // 16*8 = 128 bits || 16 for 128-bits, 24 for 192-bits, 32 for 256-bits
 /*!
  * \brief Timer time variable definition
  */
@@ -1091,7 +1093,7 @@ typedef struct {
      */
     uint8_t app_skey[16];
 
-    uint8_t toon_key[16];
+    uint8_t toon_key[TOON_KEY_SIZE];
 
 } loramac_keys;
 
